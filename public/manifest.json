@@ -1,0 +1,21 @@
+{
+  "short_name": "Jira Backlog Extension",
+  "name": "Jira backlog Extension",
+  "version":"1.0",
+  "manifest_version":3,
+  "action": {
+    "default_popup": "index.html"
+  },
+  "icons": {
+    "16": "logo192.png",
+    "48": "logo192.png",
+    "128": "logo192.png"
+  },
+  "permissions": [
+    "storage"
+  ],
+  "start_url": ".",
+  "display": "standalone",
+  "theme_color": "#000000",
+  "background_color": "#ffffff"
+}
