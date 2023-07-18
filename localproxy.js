@@ -12,16 +12,23 @@ const instance = axios.create({
         rejectUnauthorized: false
     }), 
 })
-app.get('/', function (req, res) {
-    const URL = req.url.replace('/?url=','')
-    console.log(URL)
-    console.log(req.headers)
-
+app.get('/',async function (req, res) {
     try{
-        const data = instance.get(URL, {headers:{...req.headers},})
-        return res.send(data)
+        const URL = req.url.replace('/?url=','')    
+        const token = Buffer.from(req.headers.authorization.split(' ')[1],'base64').toString().split(':')[1]
+        const forwardHeader = {
+            headers:{
+                maxBodyLength: Infinity,
+                Authorization: req.headers.authorization,
+                Accept: req.headers.accept,      
+                "Content-Type": "application/json"
+            }
+        }
+        const data = await instance.get(URL, forwardHeader)
+        return res.send(data.data)
     }catch(e){
-        return res.send(e.data.message)       
+        console.log(e)
+        return res.send(e.data)       
     }
     
 })
