@@ -1,7 +1,14 @@
-import { PropsWithChildren } from "react"
+import { PropsWithChildren, useContext, useEffect } from "react"
+import { ThemeContext } from "../context/themeContext"
+import { Theme } from "./Settings"
 
-export const DebugLayout: React.FC<PropsWithChildren> = ({ children })=>{
-    return <div className={`p-4 ${process.env.NODE_ENV ==='development' || !process.env.NODE_ENV ? 'border-black border-2' : ''}`}>
-        {children}
+export const DebugLayout: React.FC<PropsWithChildren> = ({ children }) => {
+    const [theme, setTheme] = useContext(ThemeContext) as any
+
+    return <div className={`${theme === Theme.DARK ? "dark" : ""}`}>
+        <div className={`p-4  dark:bg-gray-900 ${process.env.NODE_ENV === 'development' || !process.env.NODE_ENV ? 'border-black border-2' : ''}`}>
+            {children}
+        </div>
+
     </div>
 }
