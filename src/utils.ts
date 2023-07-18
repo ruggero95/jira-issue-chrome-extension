@@ -43,8 +43,7 @@ export const getChromeStorage = async (key: string) => {
 
 const authHeader = async () => {
     const settings: SettingsI = JSON.parse(await getChromeStorage(StorageEnum.SETTINGS) ?? "{}")
-    const auth = btoa(`ruggero.panzeri95@gmail.com:${settings.token}`)
-    console.log(auth)
+    const auth = btoa(`${settings.mail}:${settings.token}`)
     return {
         Authorization: `Basic ${auth}`,
         accept: 'application/json',  
