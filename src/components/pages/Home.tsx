@@ -4,47 +4,63 @@ import { getIssueNotInSprint, getIssueWithSprint } from "../../api/jira";
 import { JiraIssueResponse } from "../../api/jira.respons";
 import { copyContent } from "../../utils";
 import { Card } from "../Card";
-import {  HomeHeader } from "../HomeHeader"
+import { CardIssue } from "../CardIssue";
+import { CopyButton } from "../CopyButton";
+import { HomeHeader } from "../HomeHeader"
+import { CopyIcon } from "../icons/CopyIcon";
 import { Spinner } from "../Spinner";
 import { Title } from "../Title"
 
 export const Home = () => {
     let {
-        isLoading:isLoadingSp, error:errorSp, data:sprintIssue, refetch:refetchSp
-    } = useQuery<JiraIssueResponse | undefined, AxiosError> ({
-            queryKey: [getIssueWithSprint.name],
-            queryFn: () => getIssueWithSprint(),
-        });
+        isLoading: isLoadingSp, error: errorSp, data: sprintIssue, refetch: refetchSp
+    } = useQuery<JiraIssueResponse | undefined, AxiosError>({
+        queryKey: [getIssueWithSprint.name],
+        queryFn: () => getIssueWithSprint(),
+    });
 
-        let {
-            isLoading:isLoadingNs, error:errorNs, data:issueNotInSprint, refetch:refetchNs
-        } = useQuery<JiraIssueResponse | undefined, AxiosError> ({
-                queryKey: [getIssueNotInSprint.name],
-                queryFn: () => getIssueNotInSprint(),
-            });
-
+    let {
+        isLoading: isLoadingNs, error: errorNs, data: issueNotInSprint, refetch: refetchNs
+    } = useQuery<JiraIssueResponse | undefined, AxiosError>({
+        queryKey: [getIssueNotInSprint.name],
+        queryFn: () => getIssueNotInSprint(),
+    });
+    const issueRefetch = () => {
+        refetchSp()
+        refetchNs()
+    }
     return <div>
-        <HomeHeader />
+        <HomeHeader refetch={issueRefetch} />
         <Title title='Sprint' />
         <div>
-        {isLoadingSp && <Spinner className="text-center"/>}
-            {!isLoadingSp && sprintIssue?.issues?.map((i)=>{
-                return <Card>
-                    <div className="flex">
-                        <div className="px-3 py-2 bg-gray-100 rounded-lg cursor-pointer">{i.key}</div>
-                        <div className="font-sm">{i.fields.summary}</div>
-                    </div>
-                    
-                </Card>
+            {isLoadingSp && <Spinner className="text-center" />}
+            {!isLoadingSp && sprintIssue?.issues?.map((i, index) => {
+                return <CardIssue
+                    status={i.fields.status.name}
+                    epic={i.fields.parent && i.fields.parent.fields ? i.fields.parent.fields.summary : ''}
+                    key={`sprint-${index}`}
+                    keyIssue={i.key}
+                    assignee={i.fields.assignee.avatarUrls["48x48"]}
+                    labels={i.fields.labels}
+                    issueUrl={i.self}
+                    summary={i.fields.summary}
+                    priority={i.fields.priority.iconUrl} />
             })}
         </div>
         <Title title='Backlog' />
         <div>
-            {isLoadingNs && <Spinner className="text-center"/>}
-            {!isLoadingNs && issueNotInSprint?.issues?.map((i)=>{
-                return <Card>
-                {i.key}
-            </Card>
+            {isLoadingNs && <Spinner className="text-center" />}
+            {!isLoadingNs && issueNotInSprint?.issues?.map((i, index) => {
+                return <CardIssue
+                    status={i.fields.status.name}
+                    epic={i.fields.parent && i.fields.parent.fields ? i.fields.parent.fields.summary : ''}
+                    key={`backlog-${index}`}
+                    keyIssue={i.key}
+                    assignee={i.fields.assignee.avatarUrls["48x48"]}
+                    labels={i.fields.labels}
+                    issueUrl={i.self}
+                    summary={i.fields.summary}
+                    priority={i.fields.priority.iconUrl} />
             })}
         </div>
     </div>
