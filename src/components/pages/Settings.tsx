@@ -30,9 +30,9 @@ export const Settings = () => {
 
         <SettingsHeader />
         <Title title='Settings' />
-        <CustomInput id="token" name="token" value={settings?.token ?? ''} onChange={(e) => { changeValue(e, 'token') }} label="Token" small={<a href={TOKEN_LINK} rel="noreferrer" target="_blank">Genera token</a>} />
+        <CustomInput id="token" name="token" value={settings?.token ?? ''} onChange={(e) => { changeValue(e, 'token') }} label="Token" small={<a href={TOKEN_LINK} rel="noreferrer" target="_blank">Generate token</a>} />
         <CustomInput id="mail" name="mail" value={settings?.mail ?? ''} onChange={(e) => { changeValue(e, 'mail') }} label="Mail" />
-        <CustomInput id="jiraUrl" name="jiraUrl" value={settings?.jiraUrl ?? ''} onChange={(e) => { changeValue(e, 'jiraUrl') }} label="Jira Url" small={"Esempio: https://team-123456.atlassian.net"} />
+        <CustomInput id="jiraUrl" name="jiraUrl" value={settings?.jiraUrl ?? ''} onChange={(e) => { changeValue(e, 'jiraUrl') }} label="Jira Url" small={"Example: https://team-123456.atlassian.net"} />
         <CustomToggle onChange={(e) => { changeValue(e, 'onlyMe') }} checked={settings?.onlyMe?.toString() === "true"} value={settings?.onlyMe?.toString() ?? "true"} text="Show only my issue" id="toggle" />
         <div className="font-bold mt-2">
             Boards
