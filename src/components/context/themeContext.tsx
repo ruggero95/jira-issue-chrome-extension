@@ -7,10 +7,10 @@ import { Theme } from '../pages/Settings';
 export const ThemeContext = createContext([Theme.LIGHT, ()=>{} ]);
 
 export const ThemeProvider: React.FC<PropsWithChildren> = ({ children }) => {
-    const [theme, setTheme] = useState();
-    const getSettings = async () => {
-        const themeFromStorage = await getChromeStorage(StorageEnum.THEME)        
-        setTheme(themeFromStorage ?? Theme.LIGHT)
+    const [theme, setTheme] = useState<Theme>();
+    const getSettings =  () => {
+        const themeFromStorage = getChromeStorage(StorageEnum.THEME)        
+        setTheme(themeFromStorage as Theme ?? Theme.LIGHT)
     }
     useEffect(() => {
         if(!theme){
