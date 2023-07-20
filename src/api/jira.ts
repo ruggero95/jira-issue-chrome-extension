@@ -9,7 +9,7 @@ const getUrl = ()=>{
 export const getIssues = async (jql?: string, maxResults: number = 150, board: number = 4): Promise<JiraIssueResponse | undefined> => {
     try {
         const params = new URLSearchParams({ maxResults: maxResults.toString() })
-        if (jql) {
+        if (jql) {            
             params.set('jql', jql)
         }
         const issues = await (await authAxiosInstance()).get<JiraIssueResponse>(`${getUrl()}/board/${board}/issue?${params.toString()}`)
@@ -19,13 +19,13 @@ export const getIssues = async (jql?: string, maxResults: number = 150, board: n
     }
 }
 
-export const getIssueWithSprint = async (jql?: string, maxResults: number = 150, board: number = 4) => {
+export const getIssueWithSprint = async (jql?: string,  board: number = 4, maxResults: number = 150,) => {
     const jqlS = jql ? `sprint!=null AND ${jql}` : 'sprint!=null'
     return getIssues(jqlS, maxResults, board)
 }
 
-export const getIssueNotInSprint = async (jql?: string, maxResults: number = 150, board: number = 4) => {
-    const jqlS = jql ? `sprint=null AND ${jql}` : 'sprint!=null'
+export const getIssueNotInSprint = async (jql?: string, board: number = 4, maxResults: number = 150,) => {
+    const jqlS = jql ? `sprint=null AND ${jql}` : 'sprint=null'    
     return getIssues(jqlS, maxResults, board)
 }
 
@@ -38,3 +38,9 @@ export const getBoards = async (maxResults: number = 150, jql?: string,): Promis
     const issues = await (await authAxiosInstance()).get<JiraBoardResponse>(`${getUrl()}/board?${params.toString()}`)
     return issues.data
 }
+
+export const getBoardUIUrl = (boardId:string,projectKey:string, url:string)=>`${url}/jira/software/projects/${projectKey}/boards/${boardId}`
+
+export const backLogUIUrl = (boardId:string,projectKey:string, url:string)=>`${url}/jira/software/projects/${projectKey}/boards/${boardId}/backlog?epics=visible`
+
+export const openIssueUIUrl = (boardId:string,projectKey:string, url:string, fbCode:string)=>`${url}/jira/software/projects/${projectKey}/boards/${boardId}/backlog?epics=visible&selectedIssue=${fbCode}`
