@@ -13,3 +13,4 @@ export type JiraResponse<T> = {
 
 export type JiraIssueResponse = JiraResponse<{issues: Issue[]}>
 export type JiraBoardResponse = JiraResponse<{values: Board[]}>
+export type JiraLabelsListResponse = JiraResponse<{values:string[]}>

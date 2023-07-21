@@ -19,9 +19,9 @@ export type Project = {
     "id": string; //"10004";
     "key": string; //"FB";
     "name": string; //"Features & Bugs";
-    "projectTypeKey": string; // "software";
-    "simplified": boolean; // true;
-    "avatarUrls": DefaultAvatar
+    "projectTypeKey"?: string; // "software";
+    "simplified"?: boolean; // true;
+    "avatarUrls"?: DefaultAvatar
 }
 
 export type IssueType = {
