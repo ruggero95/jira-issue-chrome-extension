@@ -1,6 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { AxiosError } from "axios";
 import { useContext } from "react";
+import { idText } from "typescript";
 import { backLogUIUrl, getIssueNotInSprint, getIssueWithSprint } from "../../api/jira";
 import { Issue } from "../../api/jira.issue";
 import { JiraIssueResponse } from "../../api/jira.respons";
@@ -39,7 +40,7 @@ export const Home = () => {
         if (!issueToFilter) {
             return []
         }
-        if (!filter || (!filter.label && !filter.statusIssue)) {
+        if (!filter || (!filter.label && !filter.statusIssue && !filter.user)) {
             return issueToFilter
         }
         let issues = issueToFilter
@@ -63,19 +64,20 @@ export const Home = () => {
                 }
             })
         }
-
+        if(filter && filter.user){
+            issues = issues.filter((ur)=>
+                ur?.fields?.assignee?.displayName === filter.user
+            )
+        }
 
         return issues
     }
 
     const fs = filterSprint(sprintIssue?.issues)
     const bk = filterSprint(issueNotInSprint?.issues)
-    console.log(filter)
-    console.log(filter.label)
-    console.log(filter.statusIssue)
-    console.log(filter.label || filter.statusIssue)
+
     return <div>
-        <HomeHeader hasFilters={(filter.label && filter.label.length>0) || (filter.statusIssue && filter.statusIssue.length>0)} refetch={issueRefetch} />
+        <HomeHeader hasFilters={(filter.label && filter.label.length>0) || (filter.statusIssue && filter.statusIssue.length>0) || (filter.user)} refetch={issueRefetch} />
         <div className="flex mt-5 justify-start">
             <Title title='Sprint' />
             <a target="_blank" rel="noreferrer" href={backLogUIUrl(settings.board, settings.projectKey, settings.jiraUrl)}><ExternalLinkIcon className="ml-2 mt-1 h-3 w-3" /></a>
@@ -103,7 +105,7 @@ export const Home = () => {
         </div>
         <div className={isLoadingNs ? "text-center" : ""}>
             {isLoadingNs && <Spinner className="text-center" />}
-            {!isLoadingNs && filterSprint(issueNotInSprint?.issues).map((i, index) => {
+            {!isLoadingNs && bk.map((i, index) => {
                 return <CardIssue
                     status={i.fields.status.name}
                     epic={i.fields.parent && i.fields.parent.fields ? i.fields.parent.fields.summary : ''}

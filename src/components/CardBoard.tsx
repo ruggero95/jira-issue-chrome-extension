@@ -10,7 +10,7 @@ export const CardBoard: React.FC<{ id: string, board: Board, inputName:string}> 
     const [settings, setSettings] = useContext(SettingContext) as any
 
     return (
-        <Card className="cursor-pointer" onClick={()=>setSettings({...settings, board:board.id, projectKey: board.location.projectKey})} key={`board-${id}`}>
+        <Card className="cursor-pointer h-[110px]" onClick={()=>setSettings({...settings, board:board.id, projectKey: board.location.projectKey})} key={`board-${id}`}>
             <div className="flex justify-between">
                 <div>
                     <CustomRadio id={`radio-${id}`} onChange={()=>{}} name={inputName} value={""} checked={settings.board===board.id} />    

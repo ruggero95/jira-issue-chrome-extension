@@ -1,4 +1,4 @@
-type DefaultAvatar = {
+export type DefaultAvatar = {
     "48x48": string; // "https://secure.gravatar.com/avatar/9be91e42d09eb3a73bafae6c70070e37?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FRP-4.png";
     "24x24": string; //"https://secure.gravatar.com/avatar/9be91e42d09eb3a73bafae6c70070e37?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FRP-4.png";
     "16x16": string; // "https://secure.gravatar.com/avatar/9be91e42d09eb3a73bafae6c70070e37?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FRP-4.png";

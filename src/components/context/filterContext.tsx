@@ -6,11 +6,13 @@ import { getChromeStorage, setChromeStorage } from "../../utils";
 export type FilterI = {
     label?: string[];
     statusIssue?: string[];
+    user?: string
 }
 export const FilterContext = createContext([{
     label: undefined,
-    statusIssue: undefined
-}, () => {}]);
+    statusIssue: undefined,
+    user: undefined
+}, () => { }]);
 
 
 export const FilterProvider: React.FC<PropsWithChildren> = ({ children }) => {
