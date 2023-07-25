@@ -35,7 +35,7 @@ export const Filter = () => {
     let {
         isLoading: isLoadingU, error: errorU, data: users, refetch: refetchU
     } = useQuery<JiraUsersResponse | undefined, AxiosError>({
-        queryKey: [getActiveUsers.name],
+        queryKey: ['bugworkOnlyWithString'],
         queryFn: () => getActiveUsers(),
     });
     const getStatuses = () => {
@@ -51,7 +51,7 @@ export const Filter = () => {
             <Title title="Filters" />
             <div onClick={() => setFilter({})} className="bg-red-500 rounded-md px-2 h-5 mt-1 cursor-pointer text-sm text-white font-semibold">Reset All</div>
         </div>
-        <CustomMultiSelect  isLoading={isLoadingLb} value={filter && filter.label ? filter.label.map((l: string) => ({ value: l, label: l })) : []}
+        <CustomMultiSelect isLoading={isLoadingLb} value={filter && filter.label ? filter.label.map((l: string) => ({ value: l, label: l })) : []}
             options={labels && labels.values ? labels?.values.map((l) => ({ value: l, label: l })) : []}
             onChange={(e, z) => {
                 const newVal = e.map((v) => v.value)
@@ -83,11 +83,11 @@ export const Filter = () => {
             name="filter-status"
             label="Statuses"
             className="mt-8" />
-        <CustomSelect  isLoading={isLoadingC} value={filter && filter.user ? {value:filter.user, label: filter.user} : undefined}
+        {setting.onlyMe === "false" && <CustomSelect isLoading={isLoadingC} value={filter && filter.user ? { value: filter.user, label: filter.user } : undefined}
             options={users ? users?.map((u) => ({ value: u.displayName, label: u.displayName })) : []}
-            onChange={(e, z) => {   
-                console.log(e)                            
-                console.log(z)                            
+            onChange={(e, z) => {
+                console.log(e)
+                console.log(z)
                 if (z.action === "remove-value") {
                     setFilter({ ...filter, user: e?.value })
                 } else if (z.action === "select-option") {
@@ -98,6 +98,6 @@ export const Filter = () => {
             }}
             name="filter-users"
             label="Users"
-            className="mt-8" />
+            className="mt-8" />}
     </div>
 }
