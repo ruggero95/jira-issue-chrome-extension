@@ -1,46 +1,81 @@
-# Getting Started with Create React App
+<p align="center">
+  <a href="" rel="noopener">
+ <img width=100px height=100px src="./public/icon128.png" alt="Project logo"></a>
+</p>
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+<h3 align="center">jira-chrome-extension</h3>
 
-## Available Scripts
+<div align="center">
 
-In the project directory, you can run:
+[![Status](https://img.shields.io/badge/status-active-success.svg)]()
 
-### `npm start`
+</div>
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+---
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+<p align="center"> Few lines describing your project.
+    <br> 
+</p>
 
-### `npm test`
+## 📝 Table of Contents
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+- [About](#about)
+- [CORS Trick](#cors)
+- [Getting Started](#getting_started)
+- [Local Running](#local-dev)
+- [Demo](#demo)
+- [Built Using](#built_using)
+- [Known Issues](#bug)
 
-### `npm run build`
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## 🧐 About <a name = "about"></a>
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+This project aims to bring Jira closer to the user, particularly by making it easier to copy commit code associated with issues. All of this is also accomplished with filters on labels and issue status.
+The project tis written in react and tailwind and is available only for google chrome
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## ♦️ CORS Trick <a name = "cors"></a>
+Since jira endpoint are blcoked by cors of the browser but i don't want to host or build any backend i used two different ways to get rid of this error.
+When developing local there is a simple proxy to run that mirror the call to jira and respond to the browser. On the extension i listen to all the request from the jira endpoint (you can see them under manifest.js in host permission) and rewrite the header allowing request from *
 
-### `npm run eject`
+## 🏁 Getting Started <a name = "getting_started"></a>
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+You can download the extension on google chrome web store at:
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+After that compile settings section on the extension and start working!
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+## 🔧 Local Running for dev <a name = "local-dev"></a>
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+Before start react youn need to start local proxy that simply unlock cors browser check
 
-## Learn More
+```
+node localproxy.js
+```
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+and then run react
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+```
+npm run start
+```
+
+
+## 🎈 Demo <a name="demo"></a>
+
+video
+
+## ⛏️ Built Using <a name = "built_using"></a>
+
+- [Tailwind](https://tailwindcss.com/) - utility first CSS framework
+- [React](https://react.dev/) - The library for building web components
+- [Typescript](https://vuejs.org/) - Javascript with types
+
+
+## ✍️ Authors <a name = "authors"></a>
+
+- [@ruggero95](https://github.com/ruggero95) - Idea & Initial work
+
+## 🐛 Known Issues <a name = "bug"></a>
+
+- Reset button does not retrigger rerender of user select but reset filter to from local storage
+- typings of context are bad
+- Initial Setup guide
+
