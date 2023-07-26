@@ -13,7 +13,7 @@
 
 ---
 
-<p align="center"> Few lines describing your project.
+<p align="center"> Fast copy of jira commit code and issue list with filters
     <br> 
 </p>
 
@@ -31,11 +31,12 @@
 ## 🧐 About <a name = "about"></a>
 
 This project aims to bring Jira closer to the user, particularly by making it easier to copy commit code associated with issues. All of this is also accomplished with filters on labels and issue status.
-The project tis written in react and tailwind and is available only for google chrome
+The project is written in react and tailwind and is available only for google chrome.
+It uses jira api directly from frontend without a backend.
 
 ## ♦️ CORS Trick <a name = "cors"></a>
 Since jira endpoint are blcoked by cors of the browser but i don't want to host or build any backend i used two different ways to get rid of this error.
-When developing local there is a simple proxy to run that mirror the call to jira and respond to the browser. On the extension i listen to all the request from the jira endpoint (you can see them under manifest.js in host permission) and rewrite the header allowing request from *
+If you want to develop the exetension locally there is a simple proxy to run that mirror the call to jira and respond to the browser. On the extension i listen to all the request from the jira endpoint (you can see them under manifest.js in host permission) and rewrite the header allowing request from *
 
 ## 🏁 Getting Started <a name = "getting_started"></a>
 
@@ -75,7 +76,7 @@ video
 
 ## 🐛 Known Issues <a name = "bug"></a>
 
-- Reset button does not retrigger rerender of user select but reset filter to from local storage
+- Reset button does not retrigger rerender of user select but reset filter from local storage
 - typings of context are bad
 - Initial Setup guide
 
