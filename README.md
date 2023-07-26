@@ -61,7 +61,10 @@ npm run start
 
 ## 🎈 Demo <a name="demo"></a>
 
-video
+
+https://github.com/ruggero95/jira-issue-chrome-extension/assets/9202746/0ee2a7d7-b703-482e-a464-d4eace51c729
+
+
 
 ## ⛏️ Built Using <a name = "built_using"></a>
 
