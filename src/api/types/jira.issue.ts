@@ -1,3 +1,5 @@
+import { Project } from "./jira.projects";
+
 export type DefaultAvatar = {
     "48x48": string; // "https://secure.gravatar.com/avatar/9be91e42d09eb3a73bafae6c70070e37?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FRP-4.png";
     "24x24": string; //"https://secure.gravatar.com/avatar/9be91e42d09eb3a73bafae6c70070e37?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FRP-4.png";
@@ -13,15 +15,6 @@ export type Sprint = {
     "endDate": string;//;"2023-07-14T19:00:00.000Z";
     "originBoardId": number;//;4;F
     "goal": string;//;""
-}
-export type Project = {
-    "self": string; //"https://team-1602237711474.atlassian.net/rest/api/2/project/10004";
-    "id": string; //"10004";
-    "key": string; //"FB";
-    "name": string; //"Features & Bugs";
-    "projectTypeKey"?: string; // "software";
-    "simplified"?: boolean; // true;
-    "avatarUrls"?: DefaultAvatar
 }
 
 export type IssueType = {
