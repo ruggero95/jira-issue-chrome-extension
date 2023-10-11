@@ -14,11 +14,9 @@
     "128": "icon128.png"
   },
   "permissions": [
-    "storage",
     "declarativeNetRequest",
     "declarativeNetRequestWithHostAccess",
-    "declarativeNetRequestFeedback",
-    "unlimitedStorage"
+    "declarativeNetRequestFeedback" 
   ],
   "host_permissions": [
     "https://*.atlassian.net/rest/agile/*",
