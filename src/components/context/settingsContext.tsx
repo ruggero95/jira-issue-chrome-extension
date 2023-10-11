@@ -7,7 +7,7 @@ import { Theme } from '../pages/Settings';
 export type SettingsI = {
     token?: string;
     onlyMe?: string;
-    board?: number;
+    project?: number;
     mail?: string;
     jiraUrl?: string;
     theme?: Theme;
@@ -17,14 +17,14 @@ export const SettingContext = createContext([{
     token: undefined,
         onlyMe: undefined,
         mail: undefined,
-        board: 4,
+        project: 4, //TODO remove this
         projectKey: undefined,
         jiraUrl:undefined
 },()=>{} ]);
 
 export const SettingProvider: React.FC<PropsWithChildren> = ({ children }) => {
     const [settings, setSettings] = useState<SettingsI>({        
-        board: 4,       
+        project: 4,       
     });
 
     const getSettings =  () => {

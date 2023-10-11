@@ -2,9 +2,9 @@ import { useQuery } from "@tanstack/react-query";
 import { AxiosError } from "axios";
 import { useContext } from "react";
 import { idText } from "typescript";
-import { backLogUIUrl, getIssueNotInSprint, getIssueWithSprint } from "../../api/jira";
-import { Issue } from "../../api/jira.issue";
-import { JiraIssueResponse } from "../../api/jira.respons";
+import { backLogUIUrl, getIssueNotInSprint, getIssueWithSprint } from "../../api/jira.api";
+import { Issue } from "../../api/types/jira.issue";
+import { JiraIssueResponse } from "../../api/types/jira.response";
 import { CardIssue } from "../CardIssue";
 import { FilterContext } from "../context/filterContext";
 import { SettingContext } from "../context/settingsContext";
@@ -17,19 +17,19 @@ export const Home = () => {
     const [settings, setSettings] = useContext(SettingContext) as any
     const [filter, setfilter] = useContext(FilterContext) as any
     const onlyMeFilter = settings.onlyMe === "true" ? `assignee="${settings.mail}"` : undefined
-    const issueUiUrl = backLogUIUrl(settings.board, settings.projectKey, settings.jiraUrl)
+    const issueUiUrl = backLogUIUrl(settings.project, settings.projectKey, settings.jiraUrl)
     let {
         isLoading: isLoadingSp, error: errorSp, data: sprintIssue, refetch: refetchSp
     } = useQuery<JiraIssueResponse | undefined, AxiosError>({
-        queryKey: [getIssueWithSprint.name, settings.board, settings.mail],
-        queryFn: () => getIssueWithSprint(onlyMeFilter, settings.board),
+        queryKey: [getIssueWithSprint.name, settings.project, settings.mail],
+        queryFn: () => getIssueWithSprint(onlyMeFilter, settings.project),
     });
 
     let {
         isLoading: isLoadingNs, error: errorNs, data: issueNotInSprint, refetch: refetchNs
     } = useQuery<JiraIssueResponse | undefined, AxiosError>({
-        queryKey: [getIssueNotInSprint.name, settings.board, settings.mail],
-        queryFn: () => getIssueNotInSprint(onlyMeFilter, settings.board),
+        queryKey: [getIssueNotInSprint.name, settings.project, settings.mail],
+        queryFn: () => getIssueNotInSprint(onlyMeFilter, settings.project),
     });
     const issueRefetch = () => {
         refetchSp()
@@ -80,7 +80,7 @@ export const Home = () => {
         <HomeHeader hasFilters={(filter.label && filter.label.length>0) || (filter.statusIssue && filter.statusIssue.length>0) || (filter.user)} refetch={issueRefetch} />
         <div className="flex mt-5 justify-start">
             <Title title='Sprint' />
-            <a target="_blank" rel="noreferrer" href={backLogUIUrl(settings.board, settings.projectKey, settings.jiraUrl)}><ExternalLinkIcon className="ml-2 mt-1 h-3 w-3" /></a>
+            <a target="_blank" rel="noreferrer" href={backLogUIUrl(settings.project, settings.projectKey, settings.jiraUrl)}><ExternalLinkIcon className="ml-2 mt-1 h-3 w-3" /></a>
         </div>
 
         <div className={isLoadingSp ? "text-center" : ""}>
@@ -101,7 +101,7 @@ export const Home = () => {
         </div>
         <div className="flex mt-10 justify-start">
             <Title title='Backlog' />
-            <a target="_blank" rel="noreferrer" href={backLogUIUrl(settings.board, settings.projectKey, settings.jiraUrl)}><ExternalLinkIcon className="ml-2 mt-1 h-3 w-3" /></a>
+            <a target="_blank" rel="noreferrer" href={backLogUIUrl(settings.project, settings.projectKey, settings.jiraUrl)}><ExternalLinkIcon className="ml-2 mt-1 h-3 w-3" /></a>
         </div>
         <div className={isLoadingNs ? "text-center" : ""}>
             {isLoadingNs && <Spinner className="text-center" />}
