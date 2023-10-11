@@ -42,6 +42,8 @@ If you want to develop the exetension locally there is a simple proxy to run tha
 
 You can download the extension on google chrome web store at:
 
+[Download here](https://chrome.google.com/webstore/detail/jira-backlog-extension/cjgcabihioelpgcfdhkdckllhflcmpng)
+
 After that compile settings section on the extension and start working!
 
 ## 🔧 Local Running for dev <a name = "local-dev"></a>
