@@ -64,12 +64,6 @@ export const getLabels = async (): Promise<JiraLabelsListResponse> => {
     return issues.data
 }
 
-export const getConfiguration = async (board: number): Promise<JiraConfiguration> => {
-    const issues = await (await authAxiosInstance()).get<JiraConfiguration>(`${getUrl()}/board/${board}/configuration`)
-    return issues.data
-}
-
-
 export const getStatuses = async(project:number):Promise<JiraStatusesPerTaskResponse>=>{
     const issues = await (await authAxiosInstance()).get<JiraStatusesPerTaskResponse>(`${getUrl("3")}/project/${project}/statuses`)
     return issues.data
