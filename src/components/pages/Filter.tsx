@@ -3,8 +3,9 @@ import { AxiosError } from "axios"
 import { useContext } from "react"
 import { Link } from "react-router-dom"
 import { SingleValue } from "react-select"
-import { getActiveUsers, getConfiguration, getLabels } from "../../api/jira.api"
+import { getActiveUsers, getConfiguration, getLabels, getStatusesList } from "../../api/jira.api"
 import { JiraConfiguration } from "../../api/types/jira.configuration"
+import { Status } from "../../api/types/jira.issue"
 import { JiraLabelsListResponse, JiraUsersResponse } from "../../api/types/jira.response"
 import { RoutesEnum } from "../../routes"
 import { FilterContext } from "../context/filterContext"
@@ -26,10 +27,10 @@ export const Filter = () => {
     });
 
     let {
-        isLoading: isLoadingC, error: errorC, data: configuration, refetch: refetchC
-    } = useQuery<JiraConfiguration | undefined, AxiosError>({
-        queryKey: [getConfiguration.name, setting.board],
-        queryFn: () => getConfiguration(setting.board),
+        isLoading: isLoadingC, error: errorC, data: statuses, refetch: refetchC
+    } = useQuery<Status[] | undefined, AxiosError>({
+        queryKey: [getStatusesList.name, setting.project],
+        queryFn: () => getStatusesList(setting.project),
     });
 
     let {
@@ -39,7 +40,7 @@ export const Filter = () => {
         queryFn: () => getActiveUsers(),
     });
     const getStatuses = () => {
-        return configuration?.columnConfig.columns.map((c) => c.name)
+        return statuses?.map((c) => c.name)
     }
     return <div>
         <Header>
@@ -69,7 +70,7 @@ export const Filter = () => {
             className="mt-5" />
 
         <CustomMultiSelect isLoading={isLoadingC} value={filter && filter.statusIssue ? filter.statusIssue.map((l: string) => ({ value: l, label: l })) : []}
-            options={configuration && configuration.columnConfig ? getStatuses()?.map((l) => ({ value: l, label: l })) : []}
+            options={statuses && statuses.length>0 ? getStatuses()?.map((l) => ({ value: l, label: l })) : []}
             onChange={(e, z) => {
                 const newVal = e.map((v) => v.value)
                 if (z.action === "remove-value") {

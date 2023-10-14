@@ -3,7 +3,8 @@ import { StorageEnum } from "../storage"
 import { authAxiosInstance, buildParam, getChromeStorage } from "../utils"
 import { JiraConfiguration } from "./types/jira.configuration"
 import { CustomField } from "./types/jira.customField"
-import { JiraIssueResponseV3, JiraLabelsListResponse, JiraProjectResponse, JiraUsersResponse } from "./types/jira.response"
+import { Status } from "./types/jira.issue"
+import { JiraIssueResponseV3, JiraLabelsListResponse, JiraProjectResponse, JiraStatusesPerTaskResponse, JiraUsersResponse } from "./types/jira.response"
 
 export type Pagination = {
     start:number;
@@ -68,6 +69,25 @@ export const getConfiguration = async (board: number): Promise<JiraConfiguration
     return issues.data
 }
 
+
+export const getStatuses = async(project:number):Promise<JiraStatusesPerTaskResponse>=>{
+    const issues = await (await authAxiosInstance()).get<JiraStatusesPerTaskResponse>(`${getUrl("3")}/project/${project}/statuses`)
+    return issues.data
+}
+
+export const getStatusesList = async (project:number):Promise<Status[]>=>{
+    const statuses = await getStatuses(project)
+    const allStatus:Status[] = [];
+    statuses.forEach((st)=>{
+        st.statuses.forEach((s)=>{
+            const presence = allStatus.find((as)=>as.name===s.name)
+            if(!presence){
+                allStatus.push(s)
+            }
+        })
+    })
+    return allStatus
+}
 
 const getUsers = async ():Promise<JiraUsersResponse>=>{
     const users =  await (await authAxiosInstance()).get<JiraUsersResponse>(`${getUrl("3")}/users/search`)

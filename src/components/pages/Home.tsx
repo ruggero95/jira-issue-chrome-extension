@@ -77,6 +77,7 @@ export const Home = () => {
     }
 
     const fs = filterSprint(sprintIssue?.issues)
+    console.log(fs)
     const bk = filterSprint(issueNotInSprint?.issues)
 
     return <div>
