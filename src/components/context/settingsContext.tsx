@@ -12,31 +12,35 @@ export type SettingsI = {
     jiraUrl?: string;
     theme?: Theme;
     projectKey?: string;
+    sprintCustomField?: string;
+    environmentCustomField?: string;
 }
 export const SettingContext = createContext([{
     token: undefined,
-        onlyMe: undefined,
-        mail: undefined,
-        project: 4, //TODO remove this
-        projectKey: undefined,
-        jiraUrl:undefined
-},()=>{} ]);
+    onlyMe: undefined,
+    mail: undefined,
+    project: undefined, //TODO remove this
+    projectKey: undefined,
+    jiraUrl: undefined,
+    sprintCustomField: undefined,
+    environmentCustomField: undefined
+}, () => { }]);
 
 export const SettingProvider: React.FC<PropsWithChildren> = ({ children }) => {
-    const [settings, setSettings] = useState<SettingsI>({        
-        project: 4,       
+    const [settings, setSettings] = useState<SettingsI>({
+        project: 4,
     });
 
-    const getSettings =  () => {
-        const settingsFromStorage =  getChromeStorage(StorageEnum.SETTINGS)        
+    const getSettings = () => {
+        const settingsFromStorage = getChromeStorage(StorageEnum.SETTINGS)
         setSettings(JSON.parse(settingsFromStorage ?? "{}"))
     }
-    const persistentSetSettings = (settings: SettingsI): void=>{
-        setChromeStorage(StorageEnum.SETTINGS,JSON.stringify(settings))
-        setSettings(settings)        
+    const persistentSetSettings = (settings: SettingsI): void => {
+        setChromeStorage(StorageEnum.SETTINGS, JSON.stringify(settings))
+        setSettings(settings)
     }
     useEffect(() => {
-        if(!settings.token){
+        if (!settings.token) {
             getSettings()
         }
     }, [])

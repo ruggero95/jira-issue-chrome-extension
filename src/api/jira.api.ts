@@ -2,7 +2,8 @@ import { SettingsI } from "../components/context/settingsContext"
 import { StorageEnum } from "../storage"
 import { authAxiosInstance, buildParam, getChromeStorage } from "../utils"
 import { JiraConfiguration } from "./types/jira.configuration"
-import { JiraBoardResponse, JiraIssueResponse, JiraLabelsListResponse, JiraProjectResponse, JiraUsersResponse } from "./types/jira.response"
+import { CustomField } from "./types/jira.customField"
+import { JiraIssueResponseV3, JiraLabelsListResponse, JiraProjectResponse, JiraUsersResponse } from "./types/jira.response"
 
 export type Pagination = {
     start:number;
@@ -16,39 +17,40 @@ const getUrl = (v: "1.0" | "3" = "1.0") => {
     }
     return `${process.env.NODE_ENV === "development" ? "http://localhost:4001?url=" : ''}${url}/rest/${v === "1.0" ? "agile" : "api"}/${v}`
 }
-export const getIssues = async (jql?: string, maxResults: number = 150, board: number = 4): Promise<JiraIssueResponse | undefined> => {
-    try {
-        const params = new URLSearchParams({ maxResults: maxResults.toString() })
-        if (jql) {
-            params.set('jql', jql)
-        }
-        const issues = await (await authAxiosInstance()).get<JiraIssueResponse>(`${getUrl()}/board/${board}/issue?${params.toString()}`)
+
+export const getIssuesV3 = async (pagination:Pagination, jql?:string): Promise<JiraIssueResponseV3 | undefined>=>{
+    try{
+        const {start, maxResults} = pagination
+        const params = buildParam({maxResults: maxResults.toString(), start: start.toString(), jql})
+        const issues = await (await authAxiosInstance()).get<JiraIssueResponseV3>(`${getUrl('3')}/search?${params.toString()}`)
         return issues.data
-    } catch (e) {
+    }catch(e){
         console.log(e)
-    }
+    }  
 }
 
-export const getIssueWithSprint = async (jql?: string, board: number = 4, maxResults: number = 150,) => {
-    const jqlS = jql ? `sprint!=null AND ${jql}` : 'sprint!=null'
-    return getIssues(jqlS, maxResults, board)
+export const getCustomFields = async ()=>{
+    //call this in setting page and save custom fileds in settings under sprint and environment
+    //https://team-1602237711474.atlassian.net/rest/api/3/field
+    //maps custom field with data
+    //use https://team-1602237711474.atlassian.net/rest/api/3/jql/autocompletedata to understand what can be queried
+    const customFields = await (await authAxiosInstance()).get<CustomField[]>(`${getUrl("3")}/field`)
+    return customFields.data
 }
 
-export const getIssueNotInSprint = async (jql?: string, board: number = 4, maxResults: number = 150,) => {
-    const jqlS = jql ? `sprint=null AND ${jql}` : 'sprint=null'
-    return getIssues(jqlS, maxResults, board)
+
+export const getIssueWithActiveSprintV3 = async (pagination:Pagination, project:number,jql?:string): Promise<JiraIssueResponseV3 | undefined>=>{
+    const sprintJql = `Sprint in openSprints() AND Sprint not in futureSprints() AND project=${project} `
+    const jqlS = jql ? `${sprintJql} AND ${jql}` : sprintJql
+    return getIssuesV3(pagination, jqlS)
+    
+}
+export const getIssueNotInSprintV3 = async(pagination:Pagination,project:number, jql?:string): Promise<JiraIssueResponseV3 | undefined>=>{
+    const notInSprint =  `Sprint is null AND  project=${project}`;
+    const jqlS = jql ? `${notInSprint} AND ${jql}`: notInSprint;
+    return getIssuesV3(pagination, jqlS)
 }
 
-
-
-export const getBoards = async (maxResults: number = 150, jql?: string,): Promise<JiraBoardResponse> => {
-    const params = new URLSearchParams({ maxResults: maxResults.toString() })
-    if (jql) {
-        params.set('jql', jql)
-    }
-    const issues = await (await authAxiosInstance()).get<JiraBoardResponse>(`${getUrl()}/board?${params.toString()}`)
-    return issues.data
-}
 
 export const getProjects = async (pagination:Pagination, jql?:string): Promise<JiraProjectResponse>=>{
     const params = buildParam({jql, maxResults: pagination.maxResults.toString(), start: pagination.start.toString() })
@@ -75,7 +77,6 @@ const getUsers = async ():Promise<JiraUsersResponse>=>{
 export const getActiveUsers = async ()=>{
     return (await getUsers()).filter((u)=>u.active===true && u.accountType==="atlassian")
 }
-export const getBoardUIUrl = (boardId: string, projectKey: string, url: string) => `${url}/jira/software/projects/${projectKey}/boards/${boardId}`
 
 export const getProjectUIUrl = ( projectKey: string, url: string) => `${url}/browse/${projectKey}`
 

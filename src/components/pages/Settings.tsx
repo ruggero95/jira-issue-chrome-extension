@@ -1,4 +1,5 @@
-import { useContext } from "react"
+import { useContext, useEffect } from "react"
+import { getCustomFields } from "../../api/jira.api"
 import { StorageEnum } from "../../storage"
 import { setChromeStorage } from "../../utils"
 import { BoardList } from "../BoardList"
@@ -26,6 +27,7 @@ export const Settings = () => {
         setChromeStorage(StorageEnum.SETTINGS, JSON.stringify(uSettings))
         setSettings(uSettings)
     }
+
     return <div className="dark:text-white">
 
         <SettingsHeader />
@@ -35,7 +37,7 @@ export const Settings = () => {
         <CustomInput id="jiraUrl" name="jiraUrl" value={settings?.jiraUrl ?? ''} onChange={(e) => { changeValue(e, 'jiraUrl') }} label="Jira Url" small={"Example: https://team-123456.atlassian.net"} />
         <CustomToggle onChange={(e) => { changeValue(e, 'onlyMe') }} checked={settings?.onlyMe?.toString() === "true"} value={settings?.onlyMe?.toString() ?? "true"} text="Show only my issue" id="toggle" />
         <div className="font-bold mt-2">
-            Boards
+            Projects
         </div>
         {settings?.token && settings.mail && settings.jiraUrl && <BoardList />}
 

@@ -40,9 +40,12 @@ export const CardIssue: React.FC<{
                 </div>
                 <div className="flex justify-between mt-2">
                     <a target="_blank" rel="noreferrer" href={`${issueUrl}&selectedIssue=${keyIssue}`}><ExternalLinkIcon className="cursor-pointer mt-1 h-3 w-3"/></a>
-                    {labels.map((l, index) => {
-                        return <SmallLabel key={`label-${index}`} className="bg-gray-100 dark:text-black" text={l}/>
-                    })}
+                    <div className="justify-end flex gap-2">
+                        {labels.map((l, index) => {
+                            return <SmallLabel key={`label-${index}`} className="bg-gray-100 dark:text-black" text={l}/>
+                        })}
+                    </div>
+                    
                 </div>
             </Card>
         )

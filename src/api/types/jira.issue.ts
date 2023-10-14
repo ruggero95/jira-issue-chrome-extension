@@ -179,3 +179,86 @@ export type Issue = {
     }
 
 }
+
+export type ParentIssue = Pick<IssueV3, 'expand' | 'id' | 'self' | 'key'> & {
+    fields: {
+        summary: string; //"Ipotecario v1",
+        status: Status;
+        priority: Priority;
+        issuetype: IssueType;
+    }
+}
+
+export type Whatches = {
+    "self": string;//"https://team-1602237711474.atlassian.net/rest/api/3/issue/FB-146/watchers",
+    "watchCount": number;//1,
+    "isWatching": boolean;//false
+}
+
+export type Votes = {
+    "self": string; //"https://team-1602237711474.atlassian.net/rest/api/3/issue/FB-146/votes",
+    "votes": number; // 0,
+    "hasVoted": boolean; //false
+}
+
+export type Progress = {
+    "progress": number; //0,
+    "total": number; // 0
+}
+export type IssueV3 = {
+    "expand": string;//"operations,versionedRepresentations,editmeta,changelog,customfield_10010.requestTypePractice,renderedFields",
+    "id": string;//"10490",
+    "self": string;//"https://team-1602237711474.atlassian.net/rest/api/3/issue/10490",
+    "key": string;//"FB-146",
+    "fields": {
+        "statuscategorychangedate": string;//"2023-10-11T15:42:00.473+0200",
+        "issuetype": IssueType;
+        "parent": ParentIssue;
+        "timespent"?: string;
+        "project": Project;
+        "fixVersions": string[]; //[]
+        "workratio": number;//-1
+        "watches": Whatches;
+        "created": string; //"2023-10-11T15:42:00.076+0200",
+        //get custom filed with field api (crazy)
+        /*"customfield_10020": [
+            {
+                "id": 23,
+                "name": "Sprint W36",
+                "state": "active",
+                "boardId": 4,
+                "goal": "",
+                "startDate": "2023-10-11T13:42:45.313Z",
+                "endDate": "2023-10-13T19:00:00.000Z"
+            }
+        ],*/
+        "priority": Priority
+        "labels": string[]; //["asset-mortgage-verification"],
+        "aggregatetimeoriginalestimate"?: string; //null,
+        "timeestimate"?: string; //null,
+        "versions": [],
+        "issuelinks": [],
+        "assignee": Assignee;
+        "updated": string; //"2023-10-11T15:43:28.405+0200";
+        "status": Status;
+        "components": [],
+        "timeoriginalestimate": null,
+        "description"?: string;//null,
+        "security"?: string;// null,       
+        "aggregatetimeestimate": string; //null,
+        "summary": string; //"test multi user run on macmini",
+        "creator": User;
+        "subtasks": string[]//[], // TODO verify this
+        /*"customfield_10041": {
+            "self": "https://team-1602237711474.atlassian.net/rest/api/3/customFieldOption/10022",
+            "value": "Breathofthewild",
+            "id": "10022"
+        },*/
+        "reporter": User;
+        "aggregateprogress": Progress;
+        //"environment": null,
+        "duedate": string; //null,
+        "progress": Progress;
+        "votes": Votes
+    } & Record<string, any> // for handle custom field
+}
