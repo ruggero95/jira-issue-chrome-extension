@@ -1,4 +1,5 @@
-import { Project } from "./jira.issue";
+import { Project } from "./jira.projects";
+
 export type ColumnConfig = {    
         "name": string;//"TO-DO",
         "statuses": StatusDetail[]    

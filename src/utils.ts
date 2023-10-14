@@ -33,3 +33,13 @@ export const copyContent = async (text:string) => {
       console.error('Failed to copy: ', err);
     }
   }
+
+  export const buildParam = (params:Record<string, string|undefined>):URLSearchParams=>{
+    const pUrl =  new URLSearchParams()
+    Object.entries(params).map(([key, value])=>{
+        if(params[key] && value){
+            pUrl.set(key,value)
+        }
+    })
+    return pUrl
+}
