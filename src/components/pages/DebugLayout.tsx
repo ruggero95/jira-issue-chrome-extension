@@ -1,7 +1,6 @@
 import { PropsWithChildren, useContext, useEffect } from "react"
 import { ThemeContext } from "../context/themeContext"
 import { Theme } from "./Settings"
-import { ToastContainer } from 'react-toastify';
 import { Toaster } from 'react-hot-toast';
 
 export const DebugLayout: React.FC<PropsWithChildren> = ({ children }) => {
@@ -12,7 +11,6 @@ export const DebugLayout: React.FC<PropsWithChildren> = ({ children }) => {
         <Toaster toastOptions={{
             duration: 1000,
         }} />
-        <ToastContainer position="top-center" limit={2} autoClose={800}/>
             {children}
         </div>
 
