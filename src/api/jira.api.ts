@@ -4,7 +4,8 @@ import { authAxiosInstance, buildParam, getChromeStorage } from "../utils"
 import { JiraConfiguration } from "./types/jira.configuration"
 import { CustomField } from "./types/jira.customField"
 import { Status } from "./types/jira.issue"
-import { JiraIssueResponseV3, JiraLabelsListResponse, JiraProjectResponse, JiraStatusesPerTaskResponse, JiraUsersResponse } from "./types/jira.response"
+import { JiraIssueResponseV3, JiraLabelsListResponse, JiraProjectResponse, JiraStatusesPerTaskResponse, JiraTransitionsResponse, JiraUsersResponse } from "./types/jira.response"
+import { Transition } from "./types/jira.transition"
 
 export type Pagination = {
     start:number;
@@ -82,7 +83,14 @@ export const getStatusesList = async (project:number):Promise<Status[]>=>{
     })
     return allStatus
 }
-
+export const getTransitions = async (issueKey:string)=>{
+    const transitions =  await (await authAxiosInstance()).get<JiraTransitionsResponse>(`${getUrl("3")}/issue/${issueKey}/transitions`)
+    return transitions.data
+}
+export const doTransition = async(issueKey:string, transition:Transition)=>{
+    const response = await (await authAxiosInstance()).post(`${getUrl("3")}/issue/${issueKey}/transitions`,{transition:transition})
+    return response.status===204
+}
 const getUsers = async ():Promise<JiraUsersResponse>=>{
     const users =  await (await authAxiosInstance()).get<JiraUsersResponse>(`${getUrl("3")}/users/search`)
     return users.data
