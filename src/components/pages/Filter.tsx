@@ -85,8 +85,7 @@ export const Filter = () => {
         {setting.onlyMe === "false" && <CustomSelect isLoading={isLoadingC} value={filter && filter.user ? { value: filter.user, label: filter.user } : undefined}
             options={users ? users?.map((u) => ({ value: u.displayName, label: u.displayName })) : []}
             onChange={(e, z) => {
-                console.log(e)
-                console.log(z)
+      
                 if (z.action === "remove-value") {
                     setFilter({ ...filter, user: e?.value })
                 } else if (z.action === "select-option") {
