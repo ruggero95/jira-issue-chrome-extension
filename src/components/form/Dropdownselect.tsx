@@ -14,7 +14,6 @@ function useOutsideAlerter(ref: any, callback: any) {
          */
         function handleClickOutside(event: any) {
             if (ref.current && !ref.current.contains(event.target)) {
-                console.log('cb')
                 callback()
             }
         }

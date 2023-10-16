@@ -28,7 +28,6 @@ export const CardIssue: React.FC<{
     priority
 }) => {
     const mapTransitions = (status:string,transitions?: Transition[], ): DropdownSelectOption[]=>{
-        console.log(transitions, status)
         if(!transitions){
             return []
         }
@@ -61,11 +60,8 @@ export const CardIssue: React.FC<{
                         setLoading(false)
                         setTransitions(transitions.transitions)
                     }} className="bg-green-100 truncate	text-green-800 mr-2" 
-                        list={optList} onChange={async (option,prevOption)=>{
-                            console.log(prevOption)
-                            console.log(option)
+                        list={optList} onChange={async (option,prevOption)=>{                          
                             const t = transitions?.find((t)=>t.to.name===option.value)
-                            console.log('transitioning',t)
                             if(t){
                                 const success = await doTransition(keyIssue,t)
                                 if(success){
@@ -73,7 +69,6 @@ export const CardIssue: React.FC<{
                                     return true
                                 }else{
                                     toast.error('error')
-                                  
                                     return false
                                 }
                             }  
