@@ -29,13 +29,17 @@ function useOutsideAlerter(ref: any, callback: any) {
 
 export const DropDownSelect: React.FC<PropsWithChildren<{
     list: DropdownSelectOption[],
-    onChange: (option: DropdownSelectOption) => void, className?: string;
+    onChange: (option: DropdownSelectOption, prevOption?:DropdownSelectOption) => boolean | Promise<boolean>, className?: string;
     isLoading: boolean;
+    isLoadingPreserveContent:boolean; //if there is already content and this is true the loadin animation will not be showed
     onDropdownClick: () => void
 }>>
     =
-    ({ onChange, list, className, onDropdownClick, isLoading }) => {
-        const [selected, setSelected] = useState<DropdownSelectOption | undefined>(undefined)
+    ({ onChange, list, className, onDropdownClick, isLoading, isLoadingPreserveContent }) => {
+
+        const dV = list.find((l) => l.default === true)
+
+        const [selected, setSelected] = useState<DropdownSelectOption | undefined>(dV)
 
         const [display, setDisplay] = useState(false)
         const wrapperRef = useRef(null);
@@ -43,13 +47,11 @@ export const DropDownSelect: React.FC<PropsWithChildren<{
             setDisplay(false)
         });
 
-        const dV = list.find((l) => l.default === true)
         return <div className="relative inline-block cursor-pointer text-left" >
             <div onClick={() => { setDisplay(!display); onDropdownClick(); }} >
                 <div className={`${className ?? ''} text-[9px] flex py-[1px] pl-2 pr-1 h-4 font-semibold rounded-sm uppercase`}>
 
-                    {!selected && !dV && 'Select'}
-                    {!selected && dV && dV.text}
+                    {!selected && 'Select'}
                     {selected && selected.text}
                     <svg className="h-4 w-4 text-gray-400" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
                         <path fillRule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z" clipRule="evenodd" />
@@ -61,7 +63,7 @@ export const DropDownSelect: React.FC<PropsWithChildren<{
                 <div className="py-1" role="none">
                     {isLoading && list.length<=1 && <Spinner width="w-4" heigth="h-4" position="text-center"/>}
                     {list.map((l, index) => {
-                        return l.hiddenFromList ? null : <button type="button" onClick={() => { setSelected(l); onChange(l); setDisplay(false) }} key={`l-${index}`} className="text-gray-700 w-full text-[11px] block px-4 py-1 hover:bg-gray-100" role="menuitem" tabIndex={-1} id="menu-item-0" data-value={l.value}>{l.text}</button>
+                        return l.hiddenFromList ? null : <button type="button" onClick={async () => {  setDisplay(false); const result = await onChange(l,selected); if(result){setSelected(l);}  }} key={`l-${index}`} className="text-gray-700 w-full text-[11px] block px-4 py-1 hover:bg-gray-100" role="menuitem" tabIndex={-1} id="menu-item-0" data-value={l.value}>{l.text}</button>
                     })}
                 </div>
             </div>}
