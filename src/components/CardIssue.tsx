@@ -1,7 +1,12 @@
+import { useState } from "react";
+import { doTransition, getTransitions } from "../api/jira.api";
+import { Transition } from "../api/types/jira.transition";
 import { Card } from "./Card";
 import { CopyButton } from "./CopyButton";
+import { DropDownSelect, DropdownSelectOption } from "./form/Dropdownselect";
 import { ExternalLinkIcon } from "./icons/ExternalLinkIcon";
 import { SmallLabel } from "./SmallLabel";
+import toast from 'react-hot-toast';
 
 export const CardIssue: React.FC<{
     keyIssue: string,
@@ -22,6 +27,26 @@ export const CardIssue: React.FC<{
     epic,
     priority
 }) => {
+    const mapTransitions = (status:string,transitions?: Transition[], ): DropdownSelectOption[]=>{
+        console.log(transitions, status)
+        if(!transitions){
+            return []
+        }
+        return transitions.map((t)=>({
+            text:t.to.name.toUpperCase(),
+            value:t.to.name,
+            default: t.to.name===status,
+            hiddenFromList:t.to.name===status,
+        }))
+    }
+    const [transitions, setTransitions] = useState<Transition[]| undefined>(undefined)
+
+    let optList: DropdownSelectOption[] = [{ text: status, value: status, default:true, hiddenFromList:true }]
+    if(typeof transitions!=='undefined'){
+        optList = mapTransitions(status, transitions)   
+    }
+
+    const [loading, setLoading] = useState(false)
         return (
             <Card>
                 <div className="flex mb-2 justify-between">
@@ -30,7 +55,30 @@ export const CardIssue: React.FC<{
                         <img src={priority} className={"w-4 h-4"} alt="assignee" />
                     </div>
                     <div className="flex">
-                        <SmallLabel className="bg-green-100 max-w-[72px] truncate	text-green-800 mr-2" text={status}/>
+                    <DropDownSelect isLoadingPreserveContent={false}  isLoading={loading} onDropdownClick={async()=>{
+                        setLoading(true)
+                        const transitions= await getTransitions(keyIssue)
+                        setLoading(false)
+                        setTransitions(transitions.transitions)
+                    }} className="bg-green-100 truncate	text-green-800 mr-2" 
+                        list={optList} onChange={async (option,prevOption)=>{
+                            console.log(prevOption)
+                            console.log(option)
+                            const t = transitions?.find((t)=>t.to.name===option.value)
+                            console.log('transitioning',t)
+                            if(t){
+                                const success = await doTransition(keyIssue,t)
+                                if(success){
+                                    toast.success(t.to.name.toUpperCase())
+                                    return true
+                                }else{
+                                    toast.error('error')
+                                  
+                                    return false
+                                }
+                            }  
+                            return false                          
+                        } }/>
                         {assignee && <img src={assignee} className={"w-6 h-6 rounded-full"} alt="assignee" />}
                     </div>
                 </div>
@@ -50,3 +98,4 @@ export const CardIssue: React.FC<{
             </Card>
         )
     }
+
